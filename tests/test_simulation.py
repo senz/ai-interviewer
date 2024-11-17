@@ -1,9 +1,14 @@
+import logging
+import os
+import random
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any, Dict, List, Tuple
+
+import pytest
+
 from tests.candidate import complete_interview
 from tests.grader import grade
-import random
-import logging
-from typing import List, Dict, Any, Tuple
 
 # Constants
 INTERVIEW_TYPES = ["ml_design", "math", "ml_theory", "system_design", "sql", "coding"]
@@ -11,6 +16,7 @@ EDGE_CASE_MODES = ["empty", "gibberish", "repeat"]
 MIN_AVERAGE_SCORE = 0.7
 MIN_INTERVIEW_SCORE = 0.2
 MAX_WORKERS = 5
+SKIP_SIMULATION = os.environ.get("SKIP_LIVE", False)
 
 
 def complete_and_grade_interview(interview_type: str, mode: str = "normal") -> Dict[str, Any]:
@@ -38,6 +44,7 @@ def complete_and_grade_interview(interview_type: str, mode: str = "normal") -> D
     return {"interview_type": interview_type, "mode": mode, "score": score}
 
 
+@pytest.mark.skipif(SKIP_SIMULATION, reason="Skipping simulation test. Set RUN_SIMULATION=True to run this test.")
 def test_simulate_interview() -> None:
     """
     Test the complete interview process for various interview types, including edge cases.

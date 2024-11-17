@@ -1,0 +1,42 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+{
+	"name": "AI Interviewer",
+	"image": "mcr.microsoft.com/devcontainers/python:3.12-bullseye",
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [
+		7860
+	],
+	"features": {
+		"ghcr.io/devcontainers/features/python:1": {
+			"toolsToInstall": "flake8,autopep8,black,yapf,mypy,pydocstyle,pycodestyle,bandit,pipenv,virtualenv,pytest,pylint,poetry,pre-commit,isort"
+		}
+	},
+
+	"remoteEnv": {
+		// "NO_PRECOMMIT": "1",
+		"GRADIO_SERVER_NAME": "0.0.0.0",
+		"OPENAI_API_KEY": "${local:OPENAI_API_KEY}",
+		"HF_API_KEY": "${local:HF_API_KEY}"
+	},
+
+	// Uncomment the next line to run commands after the container is created.
+	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y $(cat ./packages.txt) && poetry install",
+
+	"secrets": {
+		"OPENAI_API_KEY": {
+			"description": "OpenAI API Key"
+		},
+		"HF_API_KEY": {
+			"description": "Hugging Face API Key"
+		}
+	}
+
+	
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "devcontainer"
+}

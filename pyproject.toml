@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "interviewer"
+version = "0.1.0"
+description = ""
+authors = ["Kosta <kosta-codes@proton.me>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+gradio = "^4.40.0"
+openai = "^1.54.4"
+python-dotenv = "^1.0.1"
+webrtcvad = "^2.0.10"
+transformers = "^4.46.2"
+anthropic = "^0.39.0"
+requests = "^2.32.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+setuptools = "^75.5.0"
+types-requests = "^2.32.0.20241016"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,8 +1,12 @@
+import os
+
 import pytest
 
 from api.audio import STTManager, TTSManager
 from api.llm import LLMManager
 from utils.config import Config
+
+SKIP_MODELS = os.environ.get("SKIP_LIVE", False)
 
 
 @pytest.fixture
@@ -10,6 +14,7 @@ def app_config():
     return Config()
 
 
+@pytest.mark.skipif(SKIP_MODELS, reason="Skipping models test. Set RUN_MODELS=True to run this test.")
 def test_llm_connection(app_config: Config):
     """
     Test the connection and streaming capability of the LLM.
@@ -21,6 +26,7 @@ def test_llm_connection(app_config: Config):
     assert llm.streaming, "LLM streaming failed - streaming check failed"
 
 
+@pytest.mark.skipif(SKIP_MODELS, reason="Skipping models test. Set RUN_MODELS=True to run this test.")
 def test_stt_connection(app_config: Config):
     """
     Test the connection and streaming capability of the STT.
@@ -34,6 +40,7 @@ def test_stt_connection(app_config: Config):
     assert streaming, "STT streaming failed - streaming check failed"
 
 
+@pytest.mark.skipif(SKIP_MODELS, reason="Skipping models test. Set RUN_MODELS=True to run this test.")
 def test_tts_connection(app_config: Config):
     """
     Test the connection and streaming capability of the TTS.

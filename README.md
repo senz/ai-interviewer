@@ -1,36 +1,5 @@
----
-title: Interview With AI
-emoji: 📚
-colorFrom: pink
-colorTo: yellow
-sdk: gradio
-sdk_version: 4.40.0
-app_file: app.py
-pinned: true
-license: apache-2.0
-short_description: Mock tech interview with AI.
-tags:
-  - LLM
-  - AI
-  - Interview
-  - Coding
-  - System Design
-  - Speech-to-Text
-  - Text-to-Speech
-  - Agent
-  - Chatbot
-  - Voice Assistant
-  - Education
----
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
-
-
-# Welcome to the AI Mock Interviewer!
-
-You can try this service in the demo mode here: [AI Interviewer](https://huggingface.co/spaces/IliaLarchenko/interviewer).
-
-But for the good experience you need to run it locally [Project repository](https://github.com/IliaLarchenko/Interviewer).
+# AI Mock Interviewer
 
 This tool is designed to help you practice various technical interviews by simulating real interview experiences. 
 You can enhance your skills in coding, (machine learning) system design, and other topics. 
@@ -44,21 +13,18 @@ You can brush your interview skills in a realistic setting, although it’s not 
   - **Speech-to-Text and Text-to-Speech Models**: These models help to mimic real conversations by converting spoken words to text and vice versa.
 - **Model Flexibility**: You can use many different models, including those from OpenAI, open-source models from Hugging Face, and locally running models.
 - **Streaming Mode**: All models can be used in streaming mode. Instead of waiting for the full response from the AI, you can get partial responses in real-time.
+- **DevContainer Support**: The project includes a DevContainer configuration for Visual Studio Code and CodeSpaces, making it easy to set up and run the project in a containerized environment.
 
 
-# Running the AI Tech Interviewer Simulator
+## Running the Simulator
 
-To get the real experience you should run the AI interviewer locally and use your own API key or local model.
-
-## Initial Setup
-
-### Clone the Repository
+### Initial Setup
 
 First, clone the project repository to your local machine with the following commands:
 
 ```bash
-git clone https://github.com/IliaLarchenko/Interviewer
-cd interviewer
+git clone https://github.com/senz/ai-interviewer.git
+cd ai-interviewer
 ```
 
 ### Configure the Environment
@@ -72,16 +38,32 @@ nano .env  # You can use any text editor
 
 If you want to use any other model, follow the instructions in Models Configuration section.
 
-### Build and Run the Docker Container
+### Using DevContainer
 
-To build and start the Docker container:
+#### Visual Studio Code
+If you have Visual Studio Code installed, you can use the provided DevContainer configuration to set up a development environment with all dependencies pre-installed. Just open the project in VS Code and click on the "Reopen in Container" button.
+
+Once container created, all dependencies will be installed and you can run the application.
+Make sure to set up the `.env` file as described above.
 
 ```bash
-docker-compose build
-docker-compose up
+poetry run python app.py
 ```
 
-The application will be accessible at `http://localhost:7860`.
+VSCode should detect publish port and suggest to open the application in your browser.
+
+#### Command Line
+You can also use [devcontainer-cli](https://github.com/devcontainers/cli) to open the project in a container:
+
+```bash
+devcontainer open
+```
+
+#### CodeSpaces
+
+**untested**
+
+If you are using GitHub CodeSpaces, you can open the project in a new CodeSpace by clicking on the "Code" button and selecting "Open with CodeSpaces". Provide suggested secrets and you should be good to go. Use port publish/forwarding to access the application.
 
 ### Running Locally (alternative)
 
@@ -97,28 +79,28 @@ python app.py
 The application should now be accessible at `http://localhost:7860`.
 
 
-# Models Configuration
+## Models Configuration
 
 AI Interviewer is powered by three types of AI models: a Large Language Model (LLM) for simulating interviews, a Speech-to-Text (STT) model for audio processing, and a Text-to-Speech (TTS) model to read LLM responses. You can configure each model separately to tailor the experience based on your preferences and available resources.
 
-### Large Language Model (LLM)
+#### Large Language Model (LLM)
 
 - **OpenAI Models**: You can use models like GPT-3.5-turbo, GPT-4, GPT-4o or others provided by OpenAI. Set up is straightforward with your OpenAI API key.
 - **Hugging Face Models**: Models like Meta-Llama from Hugging Face can also be integrated. Make sure your API key has appropriate permissions.
 - **Claude**: You can use models from Anthropic, such as Claude, for a different interview experience. Ensure you have the necessary API key and permissions.
 - **Local Models**: If you have the capability, you can run models locally using Ollama or other tools. Ensure they are compatible with the Open AI or Hugging Face API for seamless integration.
 
-### Speech-to-Text (STT)
+#### Speech-to-Text (STT)
 
 - **OpenAI Whisper**: Available via OpenAI, this model supports multiple languages and dialects. It is also available in an open-source version on Hugging Face, giving you the flexibility to use it either through the OpenAI API or as a locally hosted version.
 - **Other OS models**: Can be used too but can require a specific wrapper to align with API requirements.
 
-### Text-to-Speech (TTS)
+#### Text-to-Speech (TTS)
 
 - **OpenAI Models**: The "tts-1" model from OpenAI is fast and produces human-like results, making it quite convenient for this use case.
 - **Other OS models**: Can be used too but can require a specific wrapper to align with API requirements. In my experience, OS models sound more robotic than OpenAI models.
 
-## Configuration via .env File
+### Configuration via .env File
 
 The tool uses a `.env` file for environment configuration. Here’s a breakdown of how this works:
 
@@ -126,7 +108,7 @@ The tool uses a `.env` file for environment configuration. Here’s a breakdown 
 - **Model URLs and Types**: Specify the API endpoint URLs for each model and their type (e.g., `OPENAI_API` for OpenAI models, `HF_API` for Hugging Face or local APIs).
 - **Model Names**: Set the specific model name, such as `gpt-4o` or `whisper-1`, to tell the application which model to interact with.
 
-### Example Configuration
+#### Example Configuration
 
 OpenAI LLM:
 ```plaintext
@@ -161,16 +143,23 @@ STT_NAME=whisper-base.en
 
 You can configure each models separately. Find more examples in the `.env.example` files provided.
 
-# Acknowledgements
+## Running tests
 
-The service is powered by Gradio, and the demo version is hosted on HuggingFace Spaces.
+```bash
+export SKIP_LIVE=1 # Skip tests that require live API access
+poetry run pytest
+```
+
+## Acknowledgements
+
+Forked from [IliaLarchenko/Interviewer](https://github.com/IliaLarchenko/Interviewer)
+
+The service is powered by Gradio.
 
 Even though the service can be used with great variety of models I want to specifically acknowledge a few of them:
 - **OpenAI**: For models like GPT, Whisper, and TTS-1. More details on their models and usage policies can be found at [OpenAI's website](https://www.openai.com).
 - **Meta**: For the Llama models, particularly the Meta-Llama-3-70B-Instruct, as well as Facebook-mms-tts-eng model. Visit [Meta AI](https://ai.facebook.com) for more information.
 - **HuggingFace**: For a wide range of models and APIs that greatly enhance the flexibility of this tool. For specific details on usage, refer to [Hugging Face's documentation](https://huggingface.co).
-
-Please ensure to review the specific documentation and follow the terms of service for each model and API you use, as this is crucial for responsible and compliant use of these technologies.
 
 
 # Important Legal and Compliance Information
@@ -187,16 +176,9 @@ The creator of this open source software disclaims all liability for any damages
 ## License Compatibility
 This project is released under the Apache 2.0 license. Users must ensure compatibility with this license when integrating additional software or libraries.
 
-## Contribution Guidelines
-Contributors are required to ensure that their contributions comply with this license and respect the legal rights of third parties.
-
 ## Specific Guidelines for Usage
-### 1. Hosted Demo Version on Hugging Face Spaces
-- **Prohibition on Personal Data Submission**: Users must not input any private, personal, sensitive information, or other restricted categories such as commercial secrets, proprietary business information, or potentially non-public financial data into this service. The functionalities that process personal data, such as CV analysis and behavioral interviews, have been disabled in this demo mode. The service is designed solely for non-personal data interaction.
-- **Third-Party API Usage**: User inputs are processed using third-party APIs, including services by OpenAI and Hugging Face OS models, under the service owner's API keys. No data is stored by the service owner. Users must review and comply with the terms of service and privacy policies of these third-party services.
-- **Hugging Face Policies**: Usage of this service on Hugging Face Spaces binds users to Hugging Face’s terms of use and privacy policy. Users are advised to review these policies, accessible on the Hugging Face website, to understand their rights and obligations.
 
-### 2. Running the Service Locally
+### Running the Service Locally
 - **Absolute User Responsibility**: When the service is run locally, users have absolute control and responsibility over its operation. Users must secure their own API keys from third-party providers or opt to run local models. Users are fully responsible for ensuring that their use complies with all applicable laws and third-party policies.
 - **Data Sensitivity Caution**: Users are strongly cautioned against entering sensitive, personal, or non-public information, including but not limited to trade secrets, undisclosed patents, or insider information that could potentially result in legal repercussions or breaches of confidentiality.
 
